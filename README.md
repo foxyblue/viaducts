@@ -11,7 +11,7 @@
 from viaducts import Viaducts
 
 viaducts = Viaducts()
-viaduct = viaducts['postgres']
+viaduct = viaducts['sandbox_postgres']
 
 viaduct.query("SELECT 43;", format=pandas)
 ```
