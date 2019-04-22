@@ -1,10 +1,12 @@
 import os
+from pathlib import Path
 
 from omniduct import DuctRegistry
 
 import configuration
 
 
+_DEFAULT_DIRECTORY = Path.home() / ".revconnect/"
 _PASSWORD_REQUIRED = (
     # Provide a meaningful message
     "Please ensure you have set the password as an environment variable"
@@ -12,9 +14,13 @@ _PASSWORD_REQUIRED = (
 
 
 class Viaducts:
-    def __init__(self):
+    def __init__(self, **options):
+        #: path, is set to a default path '.revconnect/' or passed in by
+        # the variable ``config_path`` in options.
+        path = Path(options.get("config_path", _DEFAULT_DIRECTORY))
+
+        self.configurations = configuration.load(config_path=path)
         self.registry = DuctRegistry()
-        self.configurations = configuration.load()
 
     def __getitem__(self, name):
         if name in self.registry:
@@ -37,6 +43,7 @@ def parse_value(key, value):
     Can also get the item from environment,
     and return a default if not set.
     """
+    #: ensure password has been set as an environment variable
     if key == "password":
         var_split = value.split(":", 2)
         try:

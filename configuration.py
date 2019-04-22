@@ -1,19 +1,14 @@
-import os
 from pathlib import Path
 
 from revlibs.dicts import DictLoader
 
-_DEFAULT_DIRECTORY = Path.home() / ".revconnect/"
-_ENV_VAR_FOR_FILE = "REVLIB_CONNECTIONS"
+
+def load(config_path):
+    return parse(load_connection_settings(config_path))
 
 
-def load():
-    return parse(load_connection_settings())
-
-
-def load_connection_settings():
+def load_connection_settings(directory):
     """ Retrieve connections from specified yaml."""
-    directory = Path(os.environ.get(_ENV_VAR_FOR_FILE, _DEFAULT_DIRECTORY))
     loader = DictLoader.from_path(directory)
     return list(loader.directory())
 
